@@ -37,46 +37,43 @@ class adaptive_MRI_enhancement:
         self.comparitive_study=comparitive_study
         self.plot_hist=plot_hist
 
-  def PREMO(self,clip_limit=1.5,gamma=3):
-        """
-        Pixel Redistribution Enhancement, Masking, Optimization(PREMO) for MRI intensity equalization
-        Args:
-            image: numpy array
-            clip_limit: pixel threshold to clip
-            gamma: gamma correction parameter
-        """
-        gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        h, w = gray.shape
-        #otsu's thresholding
-        thresh_val, thresh_img = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        kernel = np.ones((5, 5), np.uint8)
-        #noise removal using morhological operations
-        mask = cv2.morphologyEx(thresh_img, cv2.MORPH_OPEN, kernel, iterations=3)
-        #cumulative distribution function (CDF)
-        hist, _ = np.histogram(gray.flatten(), bins=256, range=(0, 255))
-        cdf = hist.cumsum()
-        cdf = (cdf - cdf.min()) / (cdf.max() - cdf.min()) * 255
-        #mapping intensities to CDF
-        mapping = np.interp(np.arange(256), np.arange(256), cdf)
-        out = np.interp(gray.flatten(), np.arange(256), mapping).reshape(gray.shape)
-        out = np.clip(out, 0, 255)
-        if clip_limit > 0:
-            hist, _ = np.histogram(out.flatten(), bins=256, range=(0, 255))
-            excess = np.sum(hist) - clip_limit * gray.size
-            if excess > 0:
-                limit_val = np.argmax(hist.cumsum() > excess)
-                out = np.clip(out, 0, limit_val)
-        # Gamma Correction
-        out = (out - np.min(out)) / (np.max(out) - np.min(out)) * 255
-        out = np.power(out / 255.0, gamma) * 255.0
-        #binary mask
-        out = np.where(mask == 0, gray, out)
-        #intensity range 0-255
-        out = np.clip(out, 0, 255)
-        out = cv2.cvtColor(out.astype(np.uint8), cv2.COLOR_GRAY2BGR)
-        if self.plot_hist:
-            self.plot_histograms(out)
-        return out
+  def PREMO(self, gamma=3.0):
+    """
+    Pixel Redistribution Enhancement, Masking, Optimization(PREMO) for MRI intensity equalization
+    Args:
+        image: numpy array
+        clip_limit: pixel threshold to clip
+        gamma: gamma correction parameter
+    """
+    # Convert image to grayscale
+    gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+
+    # Otsu's thresholding
+    _, thresh_img = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    # Use thresholded image directly as mask
+    mask = thresh_img
+
+    # Histogram equalization
+    hist, _ = np.histogram(gray.flatten(), bins=256, range=(0, 255))
+    cdf = hist.cumsum()
+    cdf = (cdf - cdf.min()) / (cdf.max() - cdf.min()) * 255
+    mapping = np.interp(np.arange(256), np.arange(256), cdf)
+    out = np.interp(gray.flatten(), np.arange(256), mapping).reshape(gray.shape)
+    out = np.clip(out, 0, 255)
+
+    # Contrast Stretching
+    out = (out - np.min(out)) / (np.max(out) - np.min(out)) * 255
+
+    # Gamma Correction
+    out = np.power(out / 255.0, gamma) * 255.0
+
+    # Apply mask
+    out = np.where(mask == 0, gray, out)
+    out = np.clip(out, 0, 255)
+    out = cv2.cvtColor(out.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+    return out
   
   def ssim(self,img1, img2):
         """
