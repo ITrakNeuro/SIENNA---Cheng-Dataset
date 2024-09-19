@@ -5,7 +5,7 @@ Contemporary machine learning models for computer vision, although abundant, are
 
 ![alt text](https://github.com/ITrakNeuro/SIENNA-Nature/blob/main/Comparitive%20Study.png)
 
-This repository offers the pre-trained weights of SIENNA, specifically trained on clinical data. The python script retrieves sequentially pre-trimmed MRI scans from designated data paths, applies "Pixel Redistribution Enhancement, Masking, Optimization" (PREMO) for equalization, and predicts z-slices to be GBM, MET or tumor-free using SIENNA pre-trained architecture. The patient-specific results are then presented using metrics that quantify SIENNA's performance, such as Accuracy and F1-Score.
+This repository offers the pre-trained weights of SIENNA, specifically trained on clinical data. The python script retrieves sequentially pre-trimmed MRI scans from designated data paths, applies "Pixel Redistribution Enhancement, Masking, Optimization" (PREMO) for equalization, and predicts z-slices to be GBM, MET or tumor-free using SIENNA pre-trained architecture. The results are then presented using metrics that quantify SIENNA's performance, such as Accuracy and F1-Score.
 ## Hardware Requirements for Training
 
 The training process was conducted on a Microsoft Windows 11 workstation equipped with an Intel(R) Core (TM) i7-10750H six-core CPU, 16 GB of system RAM, and a single NVIDIA GTX 1650 GPU boasting 4 GB of GPU RAM.
