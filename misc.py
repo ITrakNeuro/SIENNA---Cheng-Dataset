@@ -1,4 +1,3 @@
-
 def print_neat_results(all_results):
     class_labels = {0: "Pituitary", 1: "Meningioma", 2: "Glioma"}
     
@@ -10,7 +9,7 @@ def print_neat_results(all_results):
                 if isinstance(class_idx, str) and class_idx.startswith("Class_"):
                     class_idx = int(class_idx.split("_")[1])
                 
-                class_name = class_labels.get(class_idx, f"Unknown class {class_idx}")
+                class_name = class_labels.get(class_idx, f"{class_idx}")
                 print(f"\nClass: {class_name}")
                 print(f"  Accuracy: {metrics['Accuracy']:.2f}")
                 print(f"  Precision: {metrics['Precision']:.2f}")
