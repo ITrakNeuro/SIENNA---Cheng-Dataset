@@ -26,7 +26,7 @@ Python libraries and modules required are listed in requirements.txt.
 ### Source code for testing SIENNA:
 
 1. SIENNA Pre-trained.h5: Pre-trained weights of SIENNA on Clinical Data 2. 
-2. SIENNA analysis.py: Reads MRI images, applies preprocessing (including the patented PREMO method), loads a pre-trained model, and evaluates its performance on the test data.
+2. SIENNA.ipynb: Reads MRI images, applies preprocessing (including the patented PREMO method), loads a pre-trained model, and evaluates its performance on the test data.
 3. intensity_redistribution.py: PREMO is defined here.
 4. misc.py: Miscellaneous code
 
